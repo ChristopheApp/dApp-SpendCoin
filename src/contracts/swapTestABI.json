@@ -2,6 +2,25 @@
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "amountsTest",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "_token",
 				"type": "address"
@@ -13,62 +32,6 @@
 			}
 		],
 		"name": "burnSPC",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_tokenIn",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_usdcAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_spcAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amountUSDC",
-				"type": "uint256"
-			}
-		],
-		"name": "swapETHAndBurn",
-		"outputs": [],
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_tokenIn",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_usdcAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "_spcAddress",
-				"type": "address"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_amountUSDC",
-				"type": "uint256"
-			}
-		],
-		"name": "swapTokenAndBurn",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -182,6 +145,121 @@
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tokenIn",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_usdcAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_spcAddress",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountUSDC",
+				"type": "uint256"
+			}
+		],
+		"name": "swapAndBurn",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tokenIn",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_tokenOut",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokenForSPC",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tokenIn",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_tokenOut",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountOut",
+				"type": "uint256"
+			}
+		],
+		"name": "swapTokenForUSDC",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_tokenIn",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "_tokenOut",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_amountIn",
+				"type": "uint256"
+			}
+		],
+		"name": "swapUSDCforSPC",
+		"outputs": [
+			{
+				"internalType": "uint256[]",
+				"name": "amounts",
+				"type": "uint256[]"
+			}
+		],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

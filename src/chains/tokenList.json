@@ -7,11 +7,11 @@
     "infoURL": ""
     },
     {
-    "name": "En Y test",
-    "symbol": "ENYt",
+    "name": "Token test 1",
+    "symbol": "T1",
     "decimal": 18,
-    "address": "0x5161c0f8d8f8721ee30e7d5abb273c6da1a554ff",
-    "infoURL": "https://kovan.etherscan.io/address/0x5161c0f8d8f8721ee30e7d5abb273c6da1a554ff"
+    "address": "0x6e3dB9F28705D04C8fa0Ff1914535715e5A3F976",
+    "infoURL": "https://kovan.etherscan.io/address/0x6e3dB9F28705D04C8fa0Ff1914535715e5A3F976"
     },
     {
     "name": "Dai Stablecoin",
