@@ -42,10 +42,6 @@ function App() {
   const [accounts, setAccounts] = useState([])
   const [balance, setBalance] = useState(0)
 
-  // SPCB
-  const [spcbAmount, setSpcbAmount] = useState(0)
-  const [useReduc, setUseReduc] = useState(false)
-
 
   // NETWORK
   const [network, setNetwork] = useState({})
@@ -61,12 +57,12 @@ function App() {
   const [btnBuy, setBtnBuy] = useState(false)
   const [initialPrice, setInitialPrice] = useState(50)
   const [maxPrice, setMaxPrice] = useState(initialPrice)
+  const [colorBtn, setColorBtn] = useState('#BC1737')
 
   // SWAP INFOS
   const [addressWETH] = useState("0xd0A1E359811322d97991E03f863a0C30C2cF029C")
   const [tokenChose, setTokenChose] = useState(tokenList[0])
   const [tokenAddress, setTokenAddress] = useState(tokenList[0].address)
-  const [addressTokenOut] = useState("0x67BeF77Fef6D7bbF0fE14723E017c2fda1634Ef8") // WCS pour le contrat test v0.2
   const [amountInMax, setAmountInMax]= useState(0)
   const [displayAmountInMax, setDisplayAmountInMax]= useState(0)
 
@@ -87,6 +83,7 @@ function App() {
         })
         console.log('connected')
         setIsConnectedWeb3(true)
+        setColorBtn('#19ff00')
       } catch (err) {
         console.error(err)
       }
@@ -153,6 +150,8 @@ useEffect(async () => {
     console.log(acc)
     if (acc.length === 0)
       setIsConnectedWeb3(false)
+      setColorBtn('#BC1737')
+
   }
 
   window.ethereum.on('connect', displayAccConnect)
@@ -183,10 +182,14 @@ useEffect (()=> {
 
   if (accounts.length === 0) getAccounts()
   if (accounts.length > 0) getBalance()
-  if (accounts.length === 0)
+  if (accounts.length === 0){
     setIsConnectedWeb3(false)
+    setColorBtn('#BC1737')
+  }
   else
     setIsConnectedWeb3(true)
+    setColorBtn('#19ff00')
+
 }, [isConnectedWeb3, accounts, network, web3.eth, web3.utils])
 
 // Changer la balance lorque le token choisi change
@@ -209,10 +212,6 @@ useEffect( async () => {
       const balanceErc20 = await tokenContract.methods.balanceOf(accounts[0]).call()
       const erc20Round = Math.floor((web3.utils.fromWei(balanceErc20.toString()) * 100000))/100000
       setBalance(erc20Round)
-     
-      // const balanceEth = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
-      // const balanceRound = Math.floor((balanceEth * 100000))/100000
-      // setBalance(balanceRound)
     }
     catch(error) {
       console.log(error)
@@ -227,9 +226,7 @@ useEffect( async () => {
       setBalance(balanceR.toString())
     }
   }
-
   // Change AmountInMax
-  
   allowance()
   getAmoutIn()
 
@@ -243,10 +240,6 @@ const tokensList = tokenList.map((token, index) => {
 
 // Avoir le montant In en fonction du token 
 const getAmoutIn = async() => {
-  console.log("token chose : " + tokenChose.address)
-  console.log("token address : " + tokenAddress)
-  console.log("token out : " + addressTokenOut)
-  console.log("max price : " + maxPrice)
   let addressTokenIn;
 
   // Check if ETH or Token
@@ -254,25 +247,19 @@ const getAmoutIn = async() => {
     addressTokenIn = tokenAddress
   else
     addressTokenIn = addressWETH
-  
   try{
     const swapContract = new web3.eth.Contract(swapContractABI, swapAddress)
     const amountIn = await swapContract.methods.getAmountInMax(addressTokenIn, USDCTestAddress, web3.utils.toWei(initialPrice.toString())).call()
-    //const amountIn = await gatewayContract.methods.getAmountInMax(addressTokenIn, addressTokenOut, web3.utils.toWei(maxPrice.toString())).call()
- 
+
     const balanceAmountIn = Math.floor((web3.utils.fromWei(amountIn.toString()) * 100000))/100000
     setDisplayAmountInMax(balanceAmountIn)
     setAmountInMax(amountIn)
-
-    console.log(web3.utils.fromWei(amountIn))
 
   } catch(error) {
     console.log(error)
     console.log("Cant resolve amount in")
   }
-  console.log(allow)
 }
-console.log(amountInMax)
 
 //Clic sur le bouton buy pour swap les token
 const handdleClickBuy = async () => {
@@ -284,27 +271,15 @@ const handdleClickBuy = async () => {
     let usdcAmount = initialPrice;
     usdcAmount = web3.utils.toWei(usdcAmount.toString())
 
-    const amountOut = web3.utils.toWei(initialPrice.toString())
-
-    console.log("amount out: " + amountOut)
-    console.log("amount USDC: " + usdcAmount)
-
-    const amountSPCB = web3.utils.toWei(spcbAmount.toString())
-
     try{
       const swapContract = new web3.eth.Contract(swapContractABI, swapAddress)
       // Check tokenIn
       if(tokenChose.name === "Ether") {
         console.log("swap ETH")
         // Récupère le amountInMax à mettre en value
-        //const amountIn = await swapContract.methods.getAmountInMax(addressWETH, addressTokenOut, web3.utils.toWei(initialPrice.toString())).call()
-        const amountIn = await swapContract.methods.getAmountInMax(addressWETH, addressTokenOut, usdcAmount).call()
+        const amountIn = await swapContract.methods.getAmountInMax(addressWETH, USDCTestAddress, usdcAmount).call()
 
-        console.log("spcb amount : " + web3.utils.toWei(spcbAmount.toString()))
-        console.log("amount out : " + amountOut)
-
-        swapContract.methods.swapETHAndBurn(amountOut, amountSPCB).send({from: accounts[0], value: amountIn})
-        //gatewayContract.methods.buyWithETH(amountOut, 0).send({from: accounts[0], value: amountIn})
+        swapContract.methods.swapETHAndBurn(addressWETH, USDCTestAddress, SPCTestAddress, usdcAmount).send({from: accounts[0], value: amountIn})
           // .on('sending', () => {
         //   setOnSending("Transaction send ! Please confirm the transaction on metamask")
         // })
@@ -342,41 +317,6 @@ const handdleClickBuy = async () => {
 }
 
 
-// Toggle Use Reduc
-const toggleChecked = () => {
-  console.log(useReduc)
-  setUseReduc((prev) => !prev);
-  console.log("toggle")
-};
-
-
-useEffect (()=> {
-  if(useReduc)
-    setSpcbAmount(1)
-  else
-    setSpcbAmount(0)
-}, [useReduc])
-
-
-useEffect (()=> {
-  if(useReduc)
-    setMaxPrice(initialPrice - spcbAmount)
-  else
-    setMaxPrice(initialPrice)
-
-  getAmoutIn()
-
-}, [spcbAmount])
-
-
-useEffect (()=> {
-  getAmoutIn()
-  
-}, [maxPrice])
-
-
-
-
   /**
    * Rend JSX
    */
@@ -405,7 +345,7 @@ useEffect (()=> {
   return (
       <div className={"container"}>
         
-        <Header handleClick={() => connectToWeb3()} network={network} />
+        <Header handleClick={() => connectToWeb3()} network={network} colorBtn={colorBtn} />
           
           <div id="mainContent">
               <div id="swap-interface">
@@ -415,7 +355,7 @@ useEffect (()=> {
                           <h2>Price :&nbsp;{initialPrice}$</h2>
                       </div>
                       
-                      <h3 class="pay-with">Pay with : {balance}</h3>
+                      <h3 class="pay-with">Balance : {balance}</h3>
 
                       {/* <div className="spcb">
                         <p >Balance SPCB : {Math.floor((balanceSPCB * 100000))/100000}</p>
@@ -443,8 +383,7 @@ useEffect (()=> {
                       {/* <p><span class="italic">Slipage tolerance :</span>&nbsp;&nbsp; </p> */}
                       
                       <p class="margin-bottom-p"><span class="italic">maximum payed :</span>&nbsp;&nbsp;<span class="bold sizeERC20">{displayAmountInMax} {tokenChose.symbol}</span></p>
-                      
-                      <h2>Max Price : {maxPrice}$</h2>
+
                       {tokenAddress === "" ? null : parseInt(allow) > parseInt(amountInMax) ? null : <button onClick={() => approve()} class="btn-approve">You need to Approve</button> }
                       {/* <button onClick={() => {console.log(parseInt(allow) > parseInt(amountInMax))}}> log</button>  */}
                       <button disabled={btnBuy} onClick={() => handdleClickBuy()} class="btn-buy">BUY</button>

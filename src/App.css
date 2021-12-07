@@ -40,7 +40,8 @@ header h1 {
 
  #root {
   min-height: 100vh;
-  background: radial-gradient(circle, rgba(255, 220, 152, 1) 0%, rgba(255, 122, 122, 1) 95%);
+  /*background: radial-gradient(circle, rgba(255, 220, 152, 1) 0%, rgba(255, 122, 122, 1) 95%);*/
+  background: radial-gradient(circle, #BC1737 0%, #1D1A44 95%);
  }
 /* */
 .center {
@@ -99,7 +100,7 @@ a:hover {
 .network-name {
     display: flex;
     justify-content: flex-end;
-    color: #34313f;
+    color: #FFFF;
     font-size: 1.2rem;
     margin-top: 10px;
 }
@@ -116,13 +117,13 @@ a:hover {
 #swap-interface {
     bottom: 100px;
     border-radius: 100px;
-    height: 448px;
+    height: 408px;
     width: 500px;
-    background-color: #191b1f;
+    background-color: #00253E;
     position: relative;
     /* border: 1rem solid #000; */
-    -webkit-box-shadow: 7px 14px 17px 0px rgba(0,0,0,0.67); 
-    box-shadow: 7px 14px 17px 0px rgba(0,0,0,0.67);
+    -webkit-box-shadow: 7px 14px 17px 0px #21587D; 
+    box-shadow: 7px 14px 17px 0px #21587D;
 }
 
 form {
@@ -195,26 +196,31 @@ select option {
 }
 
 .btn-buy {
-    border-radius: 25px;
-    padding: 7px;
     width: 300px;
+    border-radius: 25px;
+    border-color: #FFFF;
+    padding: 7px;
     margin-top: 10px;
 }
 
 .btn-approve {
     width: 300px;
     border-radius: 25px;
+    border-color: #FFFF;
     padding: 7px;
     /* border: 5px solid lightcoral; */
-    background:rgba(255, 220, 152, 1);
+    background:#FFFF;
 }
 
 .btn-approve:hover{
-    background: rgba(255, 122, 122, 1);
+    background: #BC1737;
+    border-color: #BC1737;
+    color: #fff;
 }
 
 .btn-buy:hover {
-    background-color:rgba(255, 122, 122, 1);
+    background-color:#BC1737;
+    border-color: #BC1737;
     color: #fff;
 }
 
@@ -229,7 +235,7 @@ select option {
 /* FOOTER */
 
 footer {
-    color: #34313f;
+    color: #FFFF;
     text-align: center;
     font-size: 1.1rem;
     /*padding-top: 20px;*/

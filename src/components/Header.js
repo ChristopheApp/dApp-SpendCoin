@@ -6,7 +6,7 @@ export default function Header(props) {
 
       <div>
           <img className="img-logo"
-              src="./assets/logo-spendcoin.png"
+              src="./assets/logoSPC.svg"
 
               alt="logo spendcoin"
             />
@@ -16,7 +16,7 @@ export default function Header(props) {
             <button
               type="button"
               className="btn btn-lg login"
-              style={{ backgroundColor: "rgba(255, 220, 152, 1)" }}
+              style={{ backgroundColor: "#21587D" }}
             >
               Polygon
             </button>
@@ -24,7 +24,8 @@ export default function Header(props) {
             <button
               onClick={props.handleClick}
               type="button"
-              className="btn btn-warning btn-lg login"
+              className="btn btn-lg login"
+              style={{ backgroundColor: props.colorBtn }}
             >
               Connect Wallet
             </button>
