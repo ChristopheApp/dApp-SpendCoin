@@ -41,6 +41,7 @@ function App() {
   // ACCOUNT
   const [accounts, setAccounts] = useState([])
   const [balance, setBalance] = useState(0)
+  const [displayBalance, setDisplayBalance] = useState(0)
 
 
   // NETWORK
@@ -54,7 +55,7 @@ function App() {
   // const [tokenId, setTokenId] = useState("")
 
   //SET GENERAL
-  const [btnBuy, setBtnBuy] = useState(false)
+  const [disableBtnBuy, setDisableBtnBuy] = useState(false)
   const [initialPrice, setInitialPrice] = useState(50)
   const [maxPrice, setMaxPrice] = useState(initialPrice)
   const [colorBtn, setColorBtn] = useState('#BC1737')
@@ -129,6 +130,14 @@ const approve = async () => {
   })
 }
 
+//Disable btnBuy 
+// useEffect (() => {
+//   if (parseInt(allow) >= parseInt(amountInMax))
+//     setDisableBtnBuy(false)
+//   else
+//     setDisableBtnBuy(true)
+// }, [allow])
+
 /*
   Connection au chargement de la page
 */
@@ -175,8 +184,9 @@ useEffect (()=> {
   const getAccounts = async () => setAccounts(await web3.eth.getAccounts())
   const getBalance = async () => {
     const balanceEth = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
+    setBalance(balanceEth)
     const balanceRound = Math.floor((balanceEth * 100000))/100000
-    setBalance(balanceRound)
+    setDisplayBalance(balanceRound)
   }
   console.log('balance first')
 
@@ -210,8 +220,9 @@ useEffect( async () => {
     try{
       const tokenContract = new web3.eth.Contract(erc20ABI, tokenAddress)
       const balanceErc20 = await tokenContract.methods.balanceOf(accounts[0]).call()
+      setBalance(balanceErc20)
       const erc20Round = Math.floor((web3.utils.fromWei(balanceErc20.toString()) * 100000))/100000
-      setBalance(erc20Round)
+      setDisplayBalance(erc20Round)
     }
     catch(error) {
       console.log(error)
@@ -222,8 +233,9 @@ useEffect( async () => {
       console.log('balance eth')
       console.log(accounts[0])
       const balanc = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
+      setBalance(balanc)
       const balanceR = Math.floor((balanc * 100000))/100000
-      setBalance(balanceR.toString())
+      setDisplayBalance(balanceR.toString())
     }
   }
   // Change AmountInMax
@@ -254,6 +266,11 @@ const getAmoutIn = async() => {
     const balanceAmountIn = Math.floor((web3.utils.fromWei(amountIn.toString()) * 100000))/100000
     setDisplayAmountInMax(balanceAmountIn)
     setAmountInMax(amountIn)
+
+    if(balanceAmountIn < balance)
+      setDisableBtnBuy(true)
+    else
+      setDisableBtnBuy(false)
 
   } catch(error) {
     console.log(error)
@@ -355,7 +372,7 @@ const handdleClickBuy = async () => {
                           <h2>Price :&nbsp;{initialPrice}$</h2>
                       </div>
                       
-                      <h3 class="pay-with">Balance : {balance}</h3>
+                      <h3 class="pay-with">Balance : {displayBalance}</h3>
 
                       {/* <div className="spcb">
                         <p >Balance SPCB : {Math.floor((balanceSPCB * 100000))/100000}</p>
@@ -386,7 +403,7 @@ const handdleClickBuy = async () => {
 
                       {tokenAddress === "" ? null : parseInt(allow) > parseInt(amountInMax) ? null : <button onClick={() => approve()} class="btn-approve">You need to Approve</button> }
                       {/* <button onClick={() => {console.log(parseInt(allow) > parseInt(amountInMax))}}> log</button>  */}
-                      <button disabled={btnBuy} onClick={() => handdleClickBuy()} class="btn-buy">BUY</button>
+                      <button disabled={disableBtnBuy} onClick={() => handdleClickBuy()} class="btn-buy">BUY</button>
                       {
                         txHash && !isMined ?
                           <div className="center">
