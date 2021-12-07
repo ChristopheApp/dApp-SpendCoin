@@ -131,12 +131,13 @@ const approve = async () => {
 }
 
 //Disable btnBuy 
-// useEffect (() => {
-//   if (parseInt(allow) >= parseInt(amountInMax))
-//     setDisableBtnBuy(false)
-//   else
-//     setDisableBtnBuy(true)
-// }, [allow])
+ useEffect (() => {
+  if(parseInt(amountInMax) > parseInt(balance))
+    setDisableBtnBuy(true)
+  else
+    setDisableBtnBuy(false)
+
+ }, [amountInMax, balance])
 
 /*
   Connection au chargement de la page
@@ -183,8 +184,9 @@ useEffect(async () => {
 useEffect (()=> {
   const getAccounts = async () => setAccounts(await web3.eth.getAccounts())
   const getBalance = async () => {
-    const balanceEth = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
-    setBalance(balanceEth)
+    const bal = await web3.eth.getBalance(accounts[0])
+    setBalance(bal)
+    const balanceEth = web3.utils.fromWei(bal)
     const balanceRound = Math.floor((balanceEth * 100000))/100000
     setDisplayBalance(balanceRound)
   }
@@ -232,8 +234,9 @@ useEffect( async () => {
     if (accounts.length > 0) {
       console.log('balance eth')
       console.log(accounts[0])
-      const balanc = web3.utils.fromWei(await web3.eth.getBalance(accounts[0]))
-      setBalance(balanc)
+      const bal = await web3.eth.getBalance(accounts[0])
+      setBalance(bal)
+      const balanc = web3.utils.fromWei(bal)
       const balanceR = Math.floor((balanc * 100000))/100000
       setDisplayBalance(balanceR.toString())
     }
@@ -267,10 +270,7 @@ const getAmoutIn = async() => {
     setDisplayAmountInMax(balanceAmountIn)
     setAmountInMax(amountIn)
 
-    if(balanceAmountIn < balance)
-      setDisableBtnBuy(true)
-    else
-      setDisableBtnBuy(false)
+
 
   } catch(error) {
     console.log(error)
